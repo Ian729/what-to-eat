@@ -1,60 +1,115 @@
-# 🍴 what-to-eat
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-[![CC 4.0][license-image]][license-url]
-> A useful tool that helps you deciding what to eat for lunch.
+# Restaurant Picker with Gaode Map API
 
-<p align="center">
- <img alt="what-to-eat" style="display: none; margin: 0 auto;" src="https://i.imgur.com/gU53hWD.gif">
-</p>
+This Python script uses the Gaode (Amap) API to find nearby restaurants and randomly selects one for your next meal. The script can be scheduled using `crontab` to remind you where to eat lunch or dinner.
 
-回台南工作打滾也半年多了，每天最煩惱的倒不是 deadline，而是不知道要吃什麼午餐。
+## Features
 
-研究了一下 Mac 自帶的 `osascript` 和 `shell script`，並搭配簡單的 `crontab` 每日定時推播。
+- Retrieves nearby restaurants based on your current location.
+- Sorts restaurants by rating.
+- Randomly selects a restaurant from the list.
+- Can be scheduled to run automatically using `crontab`.
 
+## Requirements
 
-## 🎉 Installing / Getting started
+- Python 3.x
+- `requests` library
 
-A quick introduction of how to use, first of all:
+## Setup
 
-```shell
-git clone https://github.com/WeiChiaChang/what-to-eat.git
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/restaurant_picker.git
+cd restaurant_picker
 ```
 
-> Recommend installing on desktop directly, or you may have some tiny changes to make from `show.sh` file.
+### 2. Create a Virtual Environment
 
-Add some crontab setting on your Mac:
+Navigate to your project directory and create a virtual environment:
 
-```shell
+```bash
+python3 -m venv venv
+```
+
+### 3. Activate the Virtual Environment
+
+On macOS/Linux:
+
+```bash
+source venv/bin/activate
+```
+
+On Windows:
+
+```bash
+.\venv\Scripts\activate
+```
+
+### 4. Install Dependencies
+
+Install the required dependencies:
+
+```bash
+pip install requests
+```
+
+Alternatively, you can install dependencies from a `requirements.txt` file (if available):
+
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Get a Gaode API Key
+
+Sign up for a Gaode developer account and create a new project to obtain an API key. You can sign up [here](https://lbs.amap.com/).
+
+### 6. Set Environment Variables
+
+You need to set two environment variables:
+
+- `GAODE_API_KEY`: Your Gaode API key.
+- `MY_LOCATION`: Your current location in `longitude,latitude` format.
+
+Example:
+
+```bash
+export GAODE_API_KEY=your_api_key
+export MY_LOCATION=116.397128,39.916527  # Example for Beijing
+```
+
+### 7. Crontab Setup
+
+To run this script automatically for lunch and dinner reminders, you can set up a cron job.
+
+Edit your `crontab`:
+
+```bash
 crontab -e
 ```
 
-You will enter a terminal with empty wording, is time to get your hands dirty with vim syntax:
+Add the following lines to run the script at 12 PM and 6 PM every day:
 
-> First, press <kbd>Esc</kbd> then <kbd>i</kbd>.
-
-Then input:
-
-```shell
-20 12 * * 1-7 sh ~/Desktop/what-to-eat/show.sh
+```bash
+0 12 * * * /bin/bash -c "source /path_to_project/venv/bin/activate && python /path_to_project/restaurant_picker.py >> ~/restaurant_picker.log 2>&1"
+0 18 * * * /bin/bash -c "source /path_to_project/venv/bin/activate && python /path_to_project/restaurant_picker.py >> ~/restaurant_picker.log 2>&1"
 ```
 
-> This script will be automatically executed **at 12:20 on every day-of-week from Monday through Sunday**.
+Replace `/path_to_project/` with the full path to your project directory.
 
-> [crontab-guru](https://crontab.guru/#20_12_*_*_1-7) will do a favor for you ✨.
+### 8. Test the Script
 
-> Last step, press <kbd>Esc</kbd> then <kbd>:</kbd>, <kbd>w</kbd>, <kbd>q</kbd> and <kbd>Enter</kbd>.
+Run the script manually to test if it works correctly:
 
-Everything all done now, enjoy your lunch! ![turtle](http://i.imgur.com/879dfXS.gif)
+```bash
+python restaurant_picker.py
+```
 
-## 🔧 Configuration
+The script will fetch nearby restaurants and randomly suggest one based on ratings.
 
-Lunch lists can be customized on `src/testLunch.json` this file.
+## License
 
-## ©️ License
+This project is open-source and available under the [MIT License](LICENSE).
 
-[![CC 4.0][license-image]][license-url]
+---
 
-&copy; [WeiChiaChang](https://github.com/WeiChiaChang)
-
-[license-url]: http://www.wtfpl.net
-[license-image]: https://img.shields.io/badge/License-WTFPL%202.0-lightgrey.svg?style=flat-square
+Feel free to update the repository link, license, or any other project-specific information.
